@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,7 +22,10 @@ import java.util.Locale;
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
-    public EarthquakeAdapter(@NonNull Context context, ArrayList<Earthquake> earthquakes) {
+    private static final String E_DD_MMM_YYYY = "E DD, MMM, yyyy";
+    private static final String HH_MM_SS_A = "HH:mm:ss a";
+
+    EarthquakeAdapter(@NonNull Context context, ArrayList<Earthquake> earthquakes) {
         super(context, 0, earthquakes);
     }
 
@@ -34,28 +39,46 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.earthquake_list_item, parent, false);
         }
 
-        TextView mag = convertView.findViewById(R.id.mag);
-        TextView location = convertView.findViewById(R.id.location);
-        TextView date = convertView.findViewById(R.id.date);
-        TextView time = convertView.findViewById(R.id.time);
+        TextView magTV = convertView.findViewById(R.id.mag);
+        TextView locationTV = convertView.findViewById(R.id.location);
+        TextView proximityTV = convertView.findViewById(R.id.proximity);
+        TextView dateTV = convertView.findViewById(R.id.date);
+        TextView timeTV = convertView.findViewById(R.id.time);
 
-        mag.setText(String.valueOf(currentEarthquake.getmMag()));
-        location.setText(currentEarthquake.getmLocation());
-        Date currentEarthquakeDate = currentEarthquake.getmDate();
-        setTime(time, currentEarthquakeDate);
-        setDate(date, currentEarthquakeDate);
+        //set magnitude
+        magTV.setText(String.valueOf(currentEarthquake.getmMag()));
+
+        //set location and location offset
+        String location = currentEarthquake.getmLocation();
+
+        if(location.contains("of")){
+            String prox = (location.split("of"))[0];
+            String loc = (location.split("of"))[1].substring(1);
+
+            locationTV.setText(loc);
+            proximityTV.setText(prox);
+        } else {
+            locationTV.setText(location);
+            proximityTV.setText(R.string.near_the);
+        }
+
+        //set date and time
+        long currentEarthquakeDateTime = currentEarthquake.getmTimeInMilliseconds();
+        Date dt = new Date(currentEarthquakeDateTime);
+        setTime(timeTV, dt);
+        setDate(dateTV, dt);
 
         return convertView;
     }
 
     public void setDate(TextView view, Date dt){
-        SimpleDateFormat formatter = new SimpleDateFormat("E DD, MMM, yyyy", Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat(E_DD_MMM_YYYY, Locale.getDefault());
         String date = formatter.format(dt);
         view.setText(date);
     }
 
     public void setTime(TextView view, Date dt){
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss a", Locale.getDefault());
+        SimpleDateFormat formatter = new SimpleDateFormat(HH_MM_SS_A, Locale.getDefault());
         String time = formatter.format(dt);
         view.setText(time);
     }

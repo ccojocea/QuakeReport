@@ -9,13 +9,13 @@ import java.util.Date;
 public class Earthquake {
     private double mMag;
     private String mLocation;
-    private Date mDate;
+    private long mTimeInMilliseconds;
     //private Calendar cal;
 
-    public Earthquake(double mMag, String mLocation, Date mDate) {
+    public Earthquake(double mMag, String mLocation, long mTimeInMilliseconds) {
         this.mMag = mMag;
         this.mLocation = mLocation;
-        this.mDate = mDate;
+        this.mTimeInMilliseconds = mTimeInMilliseconds;
 //        cal = Calendar.getInstance();
 //        cal.set(year, month, day);
 //        this.mDate = cal.getTime();
@@ -29,7 +29,7 @@ public class Earthquake {
         return mLocation;
     }
 
-    public Date getmDate() {
-        return mDate;
+    public long getmTimeInMilliseconds() {
+        return mTimeInMilliseconds;
     }
 }

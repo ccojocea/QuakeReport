@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
     private static final String E_DD_MMM_YYYY = "E DD, MMM, yyyy";
     private static final String HH_MM_SS_A = "HH:mm:ss a";
+    public static final String OF = " of ";
 
     EarthquakeAdapter(@NonNull Context context, ArrayList<Earthquake> earthquakes) {
         super(context, 0, earthquakes);
@@ -46,14 +48,14 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         TextView timeTV = convertView.findViewById(R.id.time);
 
         //set magnitude
-        magTV.setText(String.valueOf(currentEarthquake.getmMag()));
+        setMag(magTV, currentEarthquake.getmMag());
 
         //set location and location offset
         String location = currentEarthquake.getmLocation();
 
-        if(location.contains("of")){
-            String prox = (location.split("of"))[0];
-            String loc = (location.split("of"))[1].substring(1);
+        if(location.contains(OF)){
+            String prox = (location.split(OF))[0] + OF;
+            String loc = (location.split(OF))[1];
 
             locationTV.setText(loc);
             proximityTV.setText(prox);
@@ -81,5 +83,11 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         SimpleDateFormat formatter = new SimpleDateFormat(HH_MM_SS_A, Locale.getDefault());
         String time = formatter.format(dt);
         view.setText(time);
+    }
+
+    public void setMag(TextView view, double mag){
+        DecimalFormat formatter = new DecimalFormat("0.0");
+        String magText = formatter.format(mag);
+        view.setText(magText);
     }
 }

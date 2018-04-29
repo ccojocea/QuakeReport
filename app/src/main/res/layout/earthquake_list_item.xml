@@ -5,23 +5,28 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/padding_s"
+    android:padding="@dimen/padding"
     tools:context=".EarthquakeActivity">
 
     <TextView
         android:id="@+id/mag"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:gravity="center"
+        android:layout_gravity="center_vertical"
         android:textAlignment="center"
-        android:layout_weight="1"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
         android:layout_marginEnd="@dimen/margin_s"
+        android:background="@drawable/magnitude_circle"
         tools:text="0.5"/>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical"
         android:paddingEnd="@dimen/padding_s"
         android:paddingStart="@dimen/padding_s">
@@ -30,13 +35,23 @@
             android:id="@+id/proximity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
+            android:textAllCaps="true"
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:textSize="12sp"
             tools:text="52km west of"/>
 
         <TextView
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Bucharest"/>
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/textColorEarthquakeLocation"
+            android:textSize="16sp"
+            tools:text="Long placeholder location that should wrap to more than 2 lines of text"/>
 
     </LinearLayout>
 
@@ -44,20 +59,25 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="3"
+        android:layout_gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="textStart"
+            android:textAlignment="textEnd"
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:textSize="12sp"
             tools:text="Sat, 29 Apr, 2018"/>
 
         <TextView
             android:id="@+id/time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="textStart"
+            android:textAlignment="textEnd"
+            android:textColor="@color/textColorEarthquakeDetails"
+            android:textSize="12sp"
             tools:text="08:30 AM"/>
 
     </LinearLayout>

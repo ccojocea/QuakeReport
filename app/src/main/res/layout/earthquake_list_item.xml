@@ -24,11 +24,29 @@
         android:layout_marginEnd="@dimen/margin"
         tools:text="Bucharest"/>
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        tools:text="Apr 29, 2018"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            tools:text="Apr 29, 2018"/>
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            tools:text="08:30 AM"/>
+
+    </LinearLayout>
+
+
 
 </LinearLayout>

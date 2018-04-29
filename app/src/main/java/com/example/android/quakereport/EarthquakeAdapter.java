@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by ccojo on 4/29/2018.
@@ -34,19 +35,28 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         }
 
         TextView mag = convertView.findViewById(R.id.mag);
-        TextView date = convertView.findViewById(R.id.date);
         TextView location = convertView.findViewById(R.id.location);
+        TextView date = convertView.findViewById(R.id.date);
+        TextView time = convertView.findViewById(R.id.time);
 
         mag.setText(String.valueOf(currentEarthquake.getmMag()));
-        setDate(date, currentEarthquake.getmDate());
         location.setText(currentEarthquake.getmLocation());
+        Date currentEarthquakeDate = currentEarthquake.getmDate();
+        setTime(time, currentEarthquakeDate);
+        setDate(date, currentEarthquakeDate);
 
         return convertView;
     }
 
     public void setDate(TextView view, Date dt){
-        SimpleDateFormat formatter = new SimpleDateFormat("E DD, MMM, yyyy \nHH:mm:ss a");
+        SimpleDateFormat formatter = new SimpleDateFormat("E DD, MMM, yyyy", Locale.getDefault());
         String date = formatter.format(dt);
         view.setText(date);
+    }
+
+    public void setTime(TextView view, Date dt){
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss a", Locale.getDefault());
+        String time = formatter.format(dt);
+        view.setText(time);
     }
 }

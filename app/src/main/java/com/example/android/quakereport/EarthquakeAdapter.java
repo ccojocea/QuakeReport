@@ -45,7 +45,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     }
 
     public void setDate(TextView view, Date dt){
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM, dd YYYY");
+        SimpleDateFormat formatter = new SimpleDateFormat("E DD, MMM, yyyy \nHH:mm:ss a");
         String date = formatter.format(dt);
         view.setText(date);
     }

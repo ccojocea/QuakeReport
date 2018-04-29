@@ -10,15 +10,21 @@ public class Earthquake {
     private double mMag;
     private String mLocation;
     private long mTimeInMilliseconds;
+    private String url;
     //private Calendar cal;
 
-    public Earthquake(double mMag, String mLocation, long mTimeInMilliseconds) {
+    public Earthquake(double mMag, String mLocation, long mTimeInMilliseconds, String url) {
         this.mMag = mMag;
         this.mLocation = mLocation;
         this.mTimeInMilliseconds = mTimeInMilliseconds;
+        this.url = url;
 //        cal = Calendar.getInstance();
 //        cal.set(year, month, day);
 //        this.mDate = cal.getTime();
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public double getmMag() {

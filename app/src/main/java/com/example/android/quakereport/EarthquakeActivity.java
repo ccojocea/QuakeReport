@@ -15,19 +15,19 @@
  */
 package com.example.android.quakereport;
 
-//import android.icu.util.Calendar;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+
 
 public class EarthquakeActivity extends AppCompatActivity {
+    // Create a fake list of earthquake locations.
+    ArrayList<Earthquake> earthquakes = new ArrayList<>();
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
@@ -36,21 +36,7 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-
-
-
-        // Create a fake list of earthquake locations.
-        ArrayList<Earthquake> earthquakes = new ArrayList<>();
         earthquakes = QueryUtils.extractEarthquakes();
-//        earthquakes.add(new Earthquake(3.4f, getString(R.string.san_francisco), 2018, 4, 22));
-//        earthquakes.add(new Earthquake(2.3f, getString(R.string.london), 2018, 5, 21));
-//        earthquakes.add(new Earthquake(5.4f, getString(R.string.mexico_city), 2018, 3, 29));
-//        earthquakes.add(new Earthquake(4.4f, getString(R.string.moscow), 2018, 2, 29));
-//        earthquakes.add(new Earthquake(1.4f, getString(R.string.rio_de_janeiro), 2018, 7, 26));
-//        earthquakes.add(new Earthquake(7.3f, getString(R.string.tokyo), 2018, 5, 25));
-//        earthquakes.add(new Earthquake(2.3f, getString(R.string.paris), 2018, 3, 29));
-//        earthquakes.add(new Earthquake(6.3f, getString(R.string.bucharest),2018, 3, 29));
-
 
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = findViewById(R.id.list);
@@ -61,5 +47,15 @@ public class EarthquakeActivity extends AppCompatActivity {
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         earthquakeListView.setAdapter(adapter);
+
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String str = earthquakes.get(position).getUrl();
+                Uri uri = Uri.parse(str);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
     }
 }

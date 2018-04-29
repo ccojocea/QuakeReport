@@ -30,7 +30,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         Earthquake currentEarthquake = getItem(position);
 
         if(convertView == null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.earthquake_list_item, parent, false);
         }
 
         TextView mag = convertView.findViewById(R.id.mag);

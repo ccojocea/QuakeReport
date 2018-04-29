@@ -1,6 +1,5 @@
 package com.example.android.quakereport;
 
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -8,20 +7,21 @@ import java.util.Date;
  */
 
 public class Earthquake {
-    private float mMag;
+    private double mMag;
     private String mLocation;
     private Date mDate;
-    private Calendar cal;
+    //private Calendar cal;
 
-    public Earthquake(float mMag, String mLocation, int year, int month, int day) {
+    public Earthquake(double mMag, String mLocation, Date mDate) {
         this.mMag = mMag;
         this.mLocation = mLocation;
-        cal = Calendar.getInstance();
-        cal.set(year, month, day);
-        this.mDate = cal.getTime();
+        this.mDate = mDate;
+//        cal = Calendar.getInstance();
+//        cal.set(year, month, day);
+//        this.mDate = cal.getTime();
     }
 
-    public float getmMag() {
+    public double getmMag() {
         return mMag;
     }
 

@@ -20,6 +20,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,23 +36,27 @@ public class EarthquakeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
+
+
+
         // Create a fake list of earthquake locations.
         ArrayList<Earthquake> earthquakes = new ArrayList<>();
-        earthquakes.add(new Earthquake(3.4f, getString(R.string.san_francisco), 2018, 3, 29));
-        earthquakes.add(new Earthquake(2.3f, getString(R.string.london), 2018, 3, 29));
-        earthquakes.add(new Earthquake(5.4f, getString(R.string.mexico_city), 2018, 3, 29));
-        earthquakes.add(new Earthquake(4.4f, getString(R.string.moscow), 2018, 3, 29));
-        earthquakes.add(new Earthquake(1.4f, getString(R.string.rio_de_janeiro), 2018, 3, 29));
-        earthquakes.add(new Earthquake(7.3f, getString(R.string.tokyo), 2018, 3, 29));
-        earthquakes.add(new Earthquake(2.3f, getString(R.string.paris), 2018, 3, 29));
-        earthquakes.add(new Earthquake(6.3f, getString(R.string.bucharest),2018, 3, 29));
+        earthquakes = QueryUtils.extractEarthquakes();
+//        earthquakes.add(new Earthquake(3.4f, getString(R.string.san_francisco), 2018, 4, 22));
+//        earthquakes.add(new Earthquake(2.3f, getString(R.string.london), 2018, 5, 21));
+//        earthquakes.add(new Earthquake(5.4f, getString(R.string.mexico_city), 2018, 3, 29));
+//        earthquakes.add(new Earthquake(4.4f, getString(R.string.moscow), 2018, 2, 29));
+//        earthquakes.add(new Earthquake(1.4f, getString(R.string.rio_de_janeiro), 2018, 7, 26));
+//        earthquakes.add(new Earthquake(7.3f, getString(R.string.tokyo), 2018, 5, 25));
+//        earthquakes.add(new Earthquake(2.3f, getString(R.string.paris), 2018, 3, 29));
+//        earthquakes.add(new Earthquake(6.3f, getString(R.string.bucharest),2018, 3, 29));
 
 
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = findViewById(R.id.list);
 
         // Create a new {@link ArrayAdapter} of earthquakes
-        EarthquakeAdapter adapter = new EarthquakeAdapter(getApplicationContext(), earthquakes);
+        EarthquakeAdapter adapter = new EarthquakeAdapter(this, earthquakes);
 
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface

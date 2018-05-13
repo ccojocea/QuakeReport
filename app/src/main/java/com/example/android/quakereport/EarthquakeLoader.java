@@ -20,6 +20,11 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
     }
 
     @Override
+    protected void onStartLoading() {
+        forceLoad();
+    }
+
+    @Override
     public List<Earthquake> loadInBackground() {
         List<Earthquake> result = QueryUtils.requestEarthquakeData(USGS_URL);
 

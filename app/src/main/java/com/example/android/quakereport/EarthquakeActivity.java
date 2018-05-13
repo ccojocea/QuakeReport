@@ -63,7 +63,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             }
         });
 
-        getLoaderManager().initLoader(0, null, this).forceLoad();
+        getLoaderManager().initLoader(0, null, this);
 
         //Start the AsyncTask to fetch earthquake data
         //new DownloadTask().execute(USGS_URL);

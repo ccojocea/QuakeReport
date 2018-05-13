@@ -5,6 +5,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,9 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     private static final String E_DD_MMM_YYYY = "E DD, MMM, yyyy";
     private static final String HH_MM_SS_A = "HH:mm:ss a";
     private static final String OF = " of ";
+    private static final String TAG = EarthquakeAdapter.class.getSimpleName();
+
+    //private List<Earthquake> earthquakes = new ArrayList<>();
 
     EarthquakeAdapter(@NonNull Context context, List<Earthquake> earthquakes) {
         super(context, 0, earthquakes);
@@ -119,4 +123,31 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
                 return ContextCompat.getColor(getContext(), R.color.magnitude10plus);
         }
     }
+
+    //TODO Marked with TODO for visibility. Overriding the following stops it from working
+    /*
+    public void setEarthquakes(List<Earthquake> data){
+        Log.d(TAG, "setEarthquakes: ");
+        if(earthquakes != null && !earthquakes.isEmpty()){
+            earthquakes.addAll(data);
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public int getCount() {
+        return earthquakes.size();
+    }
+
+    @Nullable
+    @Override
+    public Earthquake getItem(int position) {
+        return earthquakes.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+    */
 }

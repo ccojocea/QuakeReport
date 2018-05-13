@@ -15,11 +15,14 @@
  */
 package com.example.android.quakereport;
 
+import android.app.LoaderManager;
 import android.content.Intent;
+import android.content.Loader;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,10 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class EarthquakeActivity extends AppCompatActivity {
-    private static final String USGS_URL ="https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=5&limit=15";
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>>{
 
-    public static final String LOG_TAG = EarthquakeActivity.class.getName();
+
+    private static final String TAG = EarthquakeActivity.class.getName();
 
     /** Adapter for the list of earthquakes */
     private EarthquakeAdapter mAdapter;
@@ -60,9 +63,40 @@ public class EarthquakeActivity extends AppCompatActivity {
             }
         });
 
-        new DownloadTask().execute(USGS_URL);
+        getLoaderManager().initLoader(0, null, this).forceLoad();
+
+        //Start the AsyncTask to fetch earthquake data
+        //new DownloadTask().execute(USGS_URL);
     }
 
+    @Override
+    public Loader<List<Earthquake>> onCreateLoader(int id, Bundle args) {
+        Log.d(TAG, "onCreateLoader: ");
+        return new EarthquakeLoader(EarthquakeActivity.this);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> data) {
+        Log.d(TAG, "onLoadFinished: " + data.size());
+
+        //useless
+        //mAdapter.setEarthquakes(data);
+
+        mAdapter.clear();
+
+        if(data != null && !data.isEmpty()){
+            mAdapter.addAll(data);
+        }
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader<List<Earthquake>> loader) {
+        Log.d(TAG, "onLoaderReset: ");
+        mAdapter.clear();
+    }
+
+    /*
     private class DownloadTask extends AsyncTask<String, Void, List<Earthquake>>{
 
         @Override
@@ -82,4 +116,5 @@ public class EarthquakeActivity extends AppCompatActivity {
             }
         }
     }
+    */
 }

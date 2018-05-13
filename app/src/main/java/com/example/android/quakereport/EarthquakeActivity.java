@@ -19,12 +19,14 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,7 +35,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -99,6 +101,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         loadingIndicator = findViewById(R.id.loading_indicator);
+        loadingIndicator.getIndeterminateDrawable().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
 
         if(isConnected){
             Log.d(TAG, "onCreate: CONNECTED initLoader called ------------------------------------");
@@ -119,20 +122,23 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     private void onCreateSwipeToRefresh(SwipeRefreshLayout refreshLayout) {
         refreshLayout.setOnRefreshListener(this);
-//        refreshLayout.setColorScheme(
-//                android.R.color.holo_blue_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_red_light);
+
+        refreshLayout.setColorSchemeResources(
+                android.R.color.holo_blue_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_green_light,
+                android.R.color.holo_red_light
+        );
     }
+
+
 
     @Override
     public void onRefresh() {
+        
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
-
-        loadingIndicator = findViewById(R.id.loading_indicator);
 
         if(isConnected){
             Log.d(TAG, "onRefresh: CONNECTED initLoader called ------------------------------------");
@@ -141,9 +147,20 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             // because this activity implements the LoaderCallbacks interface).
             getLoaderManager().initLoader(LOADER_ID, null, this);
         } else {
+            Toast.makeText(this, R.string.no_internet_refresh, Toast.LENGTH_SHORT).show();
             Log.d(TAG, "onRefresh: NOT CONNECTED ----------------");
             loadingIndicator.setVisibility(View.GONE);
             emptyView.setText(R.string.no_internet);
+
+            if (swipeRefreshList.isRefreshing()){
+                Log.d(TAG, "onRefresh: REFRESH LIST");
+                swipeRefreshList.setRefreshing(false);
+            }
+
+            if(swipeRefreshEmpty.isRefreshing()) {
+                Log.d(TAG, "onRefresh: REFRESH EMPTY");
+                swipeRefreshEmpty.setRefreshing(false);
+            }
         }
     }
 
@@ -171,6 +188,17 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             mAdapter.addAll(data);
         } else {
             emptyView.setText(R.string.no_earthquakes);
+        }
+
+
+        if (swipeRefreshList.isRefreshing()){
+            Log.d(TAG, "onRefresh: REFRESH LIST");
+            swipeRefreshList.setRefreshing(false);
+        }
+
+        if(swipeRefreshEmpty.isRefreshing()) {
+            Log.d(TAG, "onRefresh: REFRESH EMPTY");
+            swipeRefreshEmpty.setRefreshing(false);
         }
     }
 

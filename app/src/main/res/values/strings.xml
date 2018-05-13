@@ -24,4 +24,5 @@
     <string name="paris">Paris</string>
     <string name="bucharest">Bucharest</string>
     <string name="near_the">Near the</string>
+    <string name="no_earthquakes">No earthquakes found.</string>
 </resources>

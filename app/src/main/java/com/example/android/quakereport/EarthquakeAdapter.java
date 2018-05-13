@@ -14,6 +14,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -24,9 +25,9 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
     private static final String E_DD_MMM_YYYY = "E DD, MMM, yyyy";
     private static final String HH_MM_SS_A = "HH:mm:ss a";
-    public static final String OF = " of ";
+    private static final String OF = " of ";
 
-    EarthquakeAdapter(@NonNull Context context, ArrayList<Earthquake> earthquakes) {
+    EarthquakeAdapter(@NonNull Context context, List<Earthquake> earthquakes) {
         super(context, 0, earthquakes);
     }
 

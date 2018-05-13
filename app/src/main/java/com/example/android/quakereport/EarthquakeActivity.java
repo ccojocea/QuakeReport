@@ -32,10 +32,33 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
+    /** Adapter for the list of earthquakes */
+    private EarthquakeAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
+
+        // Find a reference to the {@link ListView} in the layout
+        ListView earthquakeListView = findViewById(R.id.list);
+
+        // Create a new {@link ArrayAdapter} of earthquakes
+        mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
+
+        // Set the adapter on the {@link ListView}
+        // so the list can be populated in the user interface
+        earthquakeListView.setAdapter(mAdapter);
+
+        earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Earthquake currentEarthquake = mAdapter.getItem(position);
+                Uri earthquakeUri = Uri.parse(currentEarthquake.getUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, earthquakeUri);
+                startActivity(intent);
+            }
+        });
 
         new DownloadTask().execute(USGS_URL);
     }
@@ -48,26 +71,15 @@ public class EarthquakeActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(final List<Earthquake> earthquakes) {
-            // Find a reference to the {@link ListView} in the layout
-            ListView earthquakeListView = findViewById(R.id.list);
+        protected void onPostExecute(List<Earthquake> earthquakes) {
+            //Clear the adapter of previous earthquake data
+            mAdapter.clear();
 
-            // Create a new {@link ArrayAdapter} of earthquakes
-            EarthquakeAdapter adapter = new EarthquakeAdapter(getApplicationContext(), earthquakes);
-
-            // Set the adapter on the {@link ListView}
-            // so the list can be populated in the user interface
-            earthquakeListView.setAdapter(adapter);
-
-            earthquakeListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String str = earthquakes.get(position).getUrl();
-                    Uri uri = Uri.parse(str);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                    startActivity(intent);
-                }
-            });
+            // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
+            // data set. This will trigger the ListView to update.
+            if(earthquakes != null && !earthquakes.isEmpty()){
+                mAdapter.addAll(earthquakes);
+            }
         }
     }
 }

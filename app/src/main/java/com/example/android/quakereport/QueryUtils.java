@@ -1,6 +1,7 @@
 package com.example.android.quakereport;
 
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -17,6 +18,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ccojo on 4/29/2018.
@@ -47,7 +49,7 @@ public final class QueryUtils {
     private QueryUtils() {
     }
 
-    public static ArrayList<Earthquake> requestEarthquakeData(String requestUrl){
+    public static List<Earthquake> requestEarthquakeData(String requestUrl){
         if(requestUrl == null || requestUrl.isEmpty()){
             return null;
         }
@@ -119,13 +121,13 @@ public final class QueryUtils {
      * Return a list of {@link Earthquake} objects that has been built up from
      * parsing a JSON response.
      */
-    private static ArrayList<Earthquake> extractEarthquakes(String json) {
-        if(json == null){
+    private static List<Earthquake> extractEarthquakes(String json) {
+        if(TextUtils.isEmpty(json)){
             return null;
         }
 
         // Create an empty ArrayList that we can start adding earthquakes to
-        ArrayList<Earthquake> earthquakes = new ArrayList<>();
+        List<Earthquake> earthquakes = new ArrayList<>();
 
         // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
         // is formatted, a JSONException exception object will be thrown.

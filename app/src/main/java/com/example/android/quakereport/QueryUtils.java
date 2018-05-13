@@ -50,7 +50,7 @@ public final class QueryUtils {
     }
 
     public static List<Earthquake> requestEarthquakeData(String requestUrl){
-        Log.d(TAG, "requestEarthquakeData: ");
+        Log.d(TAG, "requestEarthquakeData: ----------------------------");
         if(requestUrl == null || requestUrl.isEmpty()){
             return null;
         }

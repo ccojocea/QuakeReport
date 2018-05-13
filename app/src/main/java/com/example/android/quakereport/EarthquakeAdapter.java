@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
-    private static final String E_DD_MMM_YYYY = "E DD, MMM, yyyy";
+    private static final String E_DD_MMM_YYYY = "E dd, MMM, yyyy";
     private static final String HH_MM_SS_A = "HH:mm:ss a";
     private static final String OF = " of ";
     private static final String TAG = EarthquakeAdapter.class.getSimpleName();

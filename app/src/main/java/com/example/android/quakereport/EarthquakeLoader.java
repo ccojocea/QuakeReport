@@ -11,24 +11,47 @@ import java.util.List;
  * Created by ccojo on 5/13/2018.
  */
 
+
+/**
+ * Loads a list of earthquakes by using an AsyncTask to perform the
+ * network request to the given URL.
+ */
 public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
-    private static final String USGS_URL ="https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=5&limit=15";
+    /** Tag for log messages */
     private static final String TAG = EarthquakeLoader.class.getSimpleName();
 
-    public EarthquakeLoader(Context context) {
+    /** Query URL */
+    private String mUrl;
+
+    /**
+     * Constructs a new {@link EarthquakeLoader}.
+     *
+     * @param context of the activity
+     * @param url to load data from
+     */
+    public EarthquakeLoader(Context context, String url) {
         super(context);
+        mUrl = url;
     }
 
     @Override
     protected void onStartLoading() {
+        Log.d(TAG, "onStartLoading: ------------------------");
         forceLoad();
     }
 
+    /**
+     * This is on a background thread.
+     */
     @Override
     public List<Earthquake> loadInBackground() {
-        List<Earthquake> result = QueryUtils.requestEarthquakeData(USGS_URL);
+        if(mUrl == null){
+            return null;
+        }
 
-        Log.d(TAG, "loadInBackground: " + result.size());
+        List<Earthquake> result = QueryUtils.requestEarthquakeData(mUrl);
+
+        Log.d(TAG, "loadInBackground: ----------------------" + result.size());
 
         return result;
     }

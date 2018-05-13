@@ -50,6 +50,14 @@ public final class QueryUtils {
     }
 
     public static List<Earthquake> requestEarthquakeData(String requestUrl){
+        //TODO Disable this (only here for testing purposes)
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+
         Log.d(TAG, "requestEarthquakeData: ----------------------------");
         if(requestUrl == null || requestUrl.isEmpty()){
             return null;

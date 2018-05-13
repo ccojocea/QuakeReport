@@ -16,11 +16,16 @@
 package com.example.android.quakereport;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -34,7 +39,7 @@ import java.util.List;
 import java.util.Set;
 
 
-public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>>{
+public class EarthquakeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<Earthquake>>, SwipeRefreshLayout.OnRefreshListener{
     private static final String USGS_URL ="https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=magnitude&minmag=4.5";
     private static final String TAG = EarthquakeActivity.class.getName();
 
@@ -49,6 +54,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     private TextView emptyView;
     private ProgressBar loadingIndicator;
+    private SwipeRefreshLayout swipeRefreshEmpty;
+    private SwipeRefreshLayout swipeRefreshList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,10 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
         /** Set the empty state TextView onto the ListView */
         emptyView = findViewById(R.id.empty_list_view);
-        earthquakeListView.setEmptyView(emptyView);
+        swipeRefreshEmpty = findViewById(R.id.swiperefresh_empty);
+        swipeRefreshList = findViewById(R.id.swiperefresh_listview);
+
+        earthquakeListView.setEmptyView(swipeRefreshEmpty);
 
         // Create a new {@link ArrayAdapter} of earthquakes
         mAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
@@ -79,14 +89,62 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             }
         });
 
-        // Initialize the loader. Pass in the int ID constant defined above and pass in null for
-        // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
-        // because this activity implements the LoaderCallbacks interface).
-        getLoaderManager().initLoader(LOADER_ID, null, this);
-        Log.d(TAG, "onCreate: initLoader called ------------------------------------");
+        //TODO might have to remove these 2 - swipe related
+        onCreateSwipeToRefresh(swipeRefreshList);
+        onCreateSwipeToRefresh(swipeRefreshEmpty);
+
+        //Connection stuff following
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        loadingIndicator = findViewById(R.id.loading_indicator);
+
+        if(isConnected){
+            Log.d(TAG, "onCreate: CONNECTED initLoader called ------------------------------------");
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            getLoaderManager().initLoader(LOADER_ID, null, this);
+        } else {
+            Log.d(TAG, "onCreate: NOT CONNECTED ------------------");
+            loadingIndicator.setVisibility(View.GONE);
+            emptyView.setText(R.string.no_internet);
+        }
+
 
         //Start the AsyncTask to fetch earthquake data
         //new DownloadTask().execute(USGS_URL);
+    }
+
+    private void onCreateSwipeToRefresh(SwipeRefreshLayout refreshLayout) {
+        refreshLayout.setOnRefreshListener(this);
+//        refreshLayout.setColorScheme(
+//                android.R.color.holo_blue_light,
+//                android.R.color.holo_orange_light,
+//                android.R.color.holo_green_light,
+//                android.R.color.holo_red_light);
+    }
+
+    @Override
+    public void onRefresh() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+
+        loadingIndicator = findViewById(R.id.loading_indicator);
+
+        if(isConnected){
+            Log.d(TAG, "onRefresh: CONNECTED initLoader called ------------------------------------");
+            // Initialize the loader. Pass in the int ID constant defined above and pass in null for
+            // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
+            // because this activity implements the LoaderCallbacks interface).
+            getLoaderManager().initLoader(LOADER_ID, null, this);
+        } else {
+            Log.d(TAG, "onRefresh: NOT CONNECTED ----------------");
+            loadingIndicator.setVisibility(View.GONE);
+            emptyView.setText(R.string.no_internet);
+        }
     }
 
     @Override
@@ -105,7 +163,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         // Clear the adapter of previous earthquake data
         mAdapter.clear();
 
-        loadingIndicator = findViewById(R.id.loading_indicator);
         loadingIndicator.setVisibility(View.GONE);
 
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
@@ -124,6 +181,8 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         // Loader reset, so we can clear out our existing data.
         mAdapter.clear();
     }
+
+
 
     /*
     private class DownloadTask extends AsyncTask<String, Void, List<Earthquake>>{
